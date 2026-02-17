@@ -1,0 +1,1 @@
+![Demo Scenario](assets/demo-scenario.png)
