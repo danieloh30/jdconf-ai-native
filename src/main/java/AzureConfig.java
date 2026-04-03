@@ -1,8 +1,9 @@
 import io.smallrye.config.ConfigMapping;
+import java.util.Optional;
 
 @ConfigMapping(prefix = "azure")
 public interface AzureConfig {
-    String subscriptionId();
+    Optional<String> subscriptionId();
     String resourceGroup();
     
     PostgresConfig postgres();

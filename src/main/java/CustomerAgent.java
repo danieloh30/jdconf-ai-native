@@ -3,7 +3,7 @@ import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
 import io.quarkiverse.langchain4j.mcp.runtime.McpToolBox;
 
-@RegisterAiService(tools = AzureConfigTool.class)
+@RegisterAiService
 public interface CustomerAgent {
     @SystemMessage("""
         You are a helpful Azure assistant with access to Azure PostgreSQL databases.
@@ -13,5 +13,3 @@ public interface CustomerAgent {
     @McpToolBox("azure-rg")
     String chat(@UserMessage String userMessage);
 }
-
-// Made with Bob

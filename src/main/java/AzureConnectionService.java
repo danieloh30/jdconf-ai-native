@@ -25,5 +25,3 @@ public class AzureConnectionService {
     }
     
 }
-
-// Made with Bob

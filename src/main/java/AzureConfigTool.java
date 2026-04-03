@@ -8,33 +8,38 @@ public class AzureConfigTool {
     @Inject
     AzureConfig azureConfig;
     
-    @Tool("Get the default Azure PostgreSQL connection configuration. Use these values when querying PostgreSQL unless the user specifies different values.")
+    @Tool("Get Azure PostgreSQL connection. Returns parameters ready to use with postgres_database_query tool.")
     public String getAzurePostgresConfig() {
         try {
+            String subscriptionId = azureConfig.subscriptionId().orElse("NOT_SET");
+            String resourceGroup = azureConfig.resourceGroup();
+            String server = azureConfig.postgres().server();
+            String database = azureConfig.postgres().database();
+            String user = azureConfig.postgres().user();
+            String password = System.getenv("AZURE_POSTGRES_PASSWORD");
+            
             return String.format("""
-                Default Azure PostgreSQL Configuration:
-                - Subscription ID: %s
-                - Resource Group: %s
-                - PostgreSQL Server: %s
-                - Database: %s
-                - User: %s
-                - Auth Type: %s
-                - Password: %s
+                Use these EXACT values for postgres_database_query tool:
+                subscription="%s"
+                resource-group="%s"
+                server="%s"
+                database="%s"
+                user="%s"
+                password="%s"
+                auth-type="PostgreSQL"
+                query="SELECT * FROM customers"
                 
-                Use these values when calling postgres_database_query tool.
-                Only ask the user if these values are not set (contain 'your-').
+                Copy each parameter exactly as shown above.
                 """,
-                azureConfig.subscriptionId(),
-                azureConfig.resourceGroup(),
-                azureConfig.postgres().server(),
-                azureConfig.postgres().database(),
-                azureConfig.postgres().user()
+                subscriptionId,
+                resourceGroup,
+                server,
+                database,
+                user,
+                password != null ? password : "NOT_SET"
             );
         } catch (Exception e) {
-            return "Error retrieving configuration: " + e.getMessage() +
-                   ". Please ensure all environment variables are set: " +
-                   "AZURE_SUBSCRIPTION_ID, AZURE_RESOURCE_GROUP, AZURE_POSTGRES_SERVER, " +
-                   "AZURE_POSTGRES_DATABASE, AZURE_POSTGRES_USER";
+            return "Error: " + e.getMessage();
         }
     }
 }
