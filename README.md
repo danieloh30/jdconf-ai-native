@@ -76,7 +76,18 @@ Once both are running, you can interact with the AI agent:
 
 **Example Query:**
 ```
-User: "Get all customer data from Azure postgres"
+User: "Get all customer data from Azure PostgreSQL"
+```
+
+```
+Get all customer data from Azure PostgreSQL with the following details:
+1. PostgreSQL Server Name: doh-customer-vs
+2. Resource Group Name: quarkus-mcp
+3. Database Name: postgres
+4. User name: quarkus
+5. Table name: customers
+6. Authentication type: PostgreSQL
+7. Password: "Your Password"
 ```
 
 **Expected Behavior:**
@@ -173,6 +184,22 @@ For production, consider:
 4. Securing the MCP server with authentication
 5. Using Azure Managed Identity instead of Azure CLI credentials
 6. Running as rootless container for better security
+
+## Create the Customers schema in Azure PostgreSQL using Azure Cloud Shell
+
+```
+CREATE TABLE customers (
+    customer_id SERIAL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    city VARCHAR(100)
+);
+
+INSERT INTO customers (username, city) 
+VALUES 
+    (‘Daniel’, ‘BOS’),
+    (‘Justin’, ‘NYC’),
+    (‘Jennie’, ‘SFO’);
+```
 
 ## Support
 
